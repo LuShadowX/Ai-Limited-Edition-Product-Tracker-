@@ -1,0 +1,12 @@
+Information about ports:
+1.  535: This is the universal SMTP code for "Bad Credentials."
+2.  80:  HTTP
+3.  443: HTTPS
+4.  200: "OK" (Success. Here is your data.)
+5.  404: "Not Found" (That page doesn't exist.)
+6.  503: "Service Unavailable" (The server is crashed or overloaded.)
+7.  403: "Forbidden" (Security blocked you)
+8.  587: It is the standard door for Email Submission. It is specifically designed to start as plain text and then upgrade to encryption.
+9.  587: TLS secure email sending (most common)
+10. 465: SSL secure email
+
