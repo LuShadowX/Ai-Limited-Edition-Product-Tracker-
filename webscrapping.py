@@ -1,4 +1,5 @@
 import requests
+import os
 from bs4 import BeautifulSoup
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -36,8 +37,8 @@ def getresult(url):
         print("Not avaliable")
         print(response.text[:100])
 def send_email(product_title,current_price,url):
-    my_email=os.getenv("My_Email")
-    my_password=os.getenv("My_Password")
+    my_email=os.getenv("MY_EMAIL")
+    my_password=os.getenv("MY_PASSWORD")
     receiver_address="supyallukshyadl1@gmail.com"
     message = f"Subject: LOW PRICE ALERT!\n\nHi! The price for {product_title} has dropped to {current_price}.\n\nBuy it here: {url}"
     with smtplib.SMTP("smtp.gmail.com",587) as connection:
