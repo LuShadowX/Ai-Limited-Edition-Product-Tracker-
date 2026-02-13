@@ -9,35 +9,44 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import smtplib
 from dotenv import load_dotenv
 load_dotenv()
+def save_to_csv(product_name,price,link):
+    file_exist=os.path.isfile("price_history.csv")
+    with open("price_history.csv",'a',newline="",encoding="utf-8") as file:
+        writer=csv.writer(file)
+        if not file_exist:
+          writer.writerow(["Date","Time","Product","Price","Link"])
+        now=datetime.now()
+        date_str=now.strftime("%Y-%m-%d")
+        time_str=now.strftime("%H:%M:%S")
+        writer.writerow([date_str, time_str, product_name, price, link])
+        print("Data save to the history")
+
 def getresult(url):
     headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9"}
-    response=requests.get(url,headers=headers,verify=False)
-    print(f"Server Responds:{response.status_code}")
-    soup=BeautifulSoup(response.content,"html.parser")
-    price_element=soup.find(class_="a-price-whole")
-    title_element=soup.find(id="productTitle")
-    if title_element:
-        product_title=title_element.get_text().strip()
-        print(f"The product name is: {product_title}")
-    if price_element:
-         price=price_element.get_text().strip()
-         clean_price=price.replace(".","").replace(",","")
-         current_price=float(clean_price)
-         print(f"The price of the product is: {current_price}")
-         budget=1000
-         if current_price<=budget:
-             print("Price is low. Sending email")
-             send_email(product_title,current_price,url)
-
-         else:
-             print("Price is high we can wait for sale")
-    else:
-        print("Could not able to find the price may be the product is sold and not avaliable")
-    if "Add to Cart" in response.text:
-        print("This is also in cart so : You can buy it")
-    else:
-        print("Not avaliable")
+    
+    try:
+        response=requests.get(url,headers=headers,verify=False)
+        print(f"Server Responds:{response.status_code}")
+        soup=BeautifulSoup(response.content,"html.parser")
+        price_element=soup.find(class_="a-price-whole")
+        title_element=soup.find(id="productTitle")
+        if title_element and price_element:
+            product_title=title_element.get_text().strip()
+            price=price_element.get_text().strip()
+            clean_price=price.replace(".","").replace(",","")
+            current_price=float(clean_price)
+            print(f"The price of the product is: {current_price}")
+            print(f"The product name is: {product_title}")
+            save_to_csv(product_title,current_price,url)
+            budget=1000
+            if current_price<=budget:
+                print("Price is low. Sending email")
+                send_email(product_title,current_price,url)
+        else:
+            print("Could not able to find the price may be the product is sold and not avaliable")
+    except Exception as e:
+        print(f"Error: {e}")
 def send_email(product_title,current_price,url):
     my_email=os.getenv("MY_EMAIL")
     my_password=os.getenv("MY_PASSWORD")
