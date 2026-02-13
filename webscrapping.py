@@ -75,7 +75,6 @@ if __name__=="__main__":
     for link in product_to_track:
         getresult(link)
         time.sleep(5)
-    print("Sleep for one hr")
-    time.sleep(3600)
+    
         
 

@@ -1,0 +1,36 @@
+name: Daily Price Tracker
+on:
+  Schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run-scraper-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Requirements
+        run: |
+          pip install requests beautifulsoup4 python-dotenv
+
+      - name: Execute Python Scripy
+        env:
+          MY_EMAIL: ${{ secrets.MY_EMAIL }}
+          MY_PASSWORD: ${{ secrets.MY_PASSWORD }}
+        run: python webscrapping.py
+
+
+      - name: Commit and Push CSV
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add price_history.csv
+          git commit -m "🤖 Auto-updated price history" || echo "No changes to commit"
+          git push
