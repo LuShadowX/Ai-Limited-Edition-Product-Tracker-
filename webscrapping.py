@@ -1,6 +1,8 @@
 import requests
 import time
 import os
+import csv
+from datetime import datetime
 from bs4 import BeautifulSoup
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -57,5 +59,8 @@ if __name__=="__main__":
     product_to_track=["https://amzn.in/d/06Pwbey5","https://amzn.in/d/0bDOcukR","https://amzn.in/d/0ik1OB5g"]
     for link in product_to_track:
         getresult(link)
+        time.sleep(5)
+    print("Sleep for one hr")
+    time.sleep(3600)
         
 
