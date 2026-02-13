@@ -9,4 +9,6 @@ Information about ports:
 8.  587: It is the standard door for Email Submission. It is specifically designed to start as plain text and then upgrade to encryption.
 9.  587: TLS secure email sending (most common)
 10. 465: SSL secure email
-
+11. 502: Bad gateway
+12. WAF: Web Application Firewall
+13. 
